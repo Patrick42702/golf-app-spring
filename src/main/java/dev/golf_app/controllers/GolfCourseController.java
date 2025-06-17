@@ -16,7 +16,7 @@ public class GolfCourseController {
   private GolfCourseRepository golfCourseRepository;
 
   @GetMapping
-  public List<GolfCourse> getAllCourses() {
+  public Iterable<GolfCourse> getAllCourses() {
     return golfCourseRepository.findAll();
   }
 
