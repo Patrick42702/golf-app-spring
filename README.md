@@ -7,5 +7,5 @@ I hope to get this project into production ready stage and possibly make it into
 ## Dependencies
 * Java 17
 * Gradle 8.5 for building
-* MySQL daemon running in the background. Need to configure the MySQL url in application.properties in order for it to connect to a useable database. \
+* MySQL daemon running in the background. Need to configure the MySQL url in application.properties in order for it to connect to a useable database.
 I just recommend using docker to spin up a mysql container. Look at the compose.yaml file in this repo and use docker compose.
