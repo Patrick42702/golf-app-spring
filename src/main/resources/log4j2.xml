@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--The root element of a Log4j2 configuration file. The status attribute represents the level of internal log4j2 events. It is set to WARN in this configuration-->
+<Configuration status="WARN">
+  #Defines common placeholders that can be used in other places in the XML file. You’ve
+  defined the LOG_PATTERN property here.
+  <Properties>
+    <Property name="LOG_PATTERN">
+      %d{yyyy-MM-dd HH:mm:ss.SSS} [%5p] [%15.15t] %-40.40c{1.} : %m%n%ex
+    </Property>
+  </Properties>
+  #List of appenders
+  <Appenders>
+    #A console appender configuration that logs the log statements in
+    console/terminal/command prompt
+    <Console name="ConsoleAppender" target="SYSTEM_OUT">
+      <PatternLayout pattern="${LOG_PATTERN}" />
+    </Console>
+    # A file appender configuration that logs the log statements in a file with
+    provided file name and pattern.
+    It also provides additional configuration such as how to manage the file over a
+    period
+    <RollingFile name="FileAppender">
+      <!--# Log file name (along with the relative path) fileName="logs/application-log4j2.log"
+      # Log file name once it rolls over. Log file name appended with date and a sequence
+      filePattern="logs/application-log4j2-%d{yyyy-MM-dd}-%i.log"-->
+      <PatternLayout>
+        <Pattern>${LOG_PATTERN}</Pattern>
+      </PatternLayout>
+      <Policies>
+        # Rolls the current log file once its size reaches 10 MB
+        <SizeBasedTriggeringPolicy size="10MB" />
+        # Rolls the current log file after 7 days
+        <TimeBasedTriggeringPolicy interval="7" />
+      </Policies>
+      # Maximum 10 back up log files can be kept
+      <DefaultRolloverStrategy max="10"/>
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+    <Logger name="dev.golf_app" level="debug" additivity="false">
+      <AppenderRef ref="FileAppender"/>
+    </Logger>
+    <Logger name="org.springframework.boot" level="info" additivity="false">
+      <AppenderRef ref="ConsoleAppender"/>
+    </Logger>
+    <Root level="info">
+      <AppenderRef ref="FileAppender"/>
+      <AppenderRef ref="ConsoleAppender"/>
+    </Root>
+  </Loggers>
+</Configuration>
