@@ -4,9 +4,14 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Table(name = "rounds")
+@Getter
+@Setter
 public class Round {
 
   @Id
