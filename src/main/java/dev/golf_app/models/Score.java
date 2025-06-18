@@ -13,12 +13,18 @@ public class Score {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID")
   private Integer id;
 
+  @Column(name = "TEES")
   private String tees;
+  @Column(name = "HOLENUMBER")
   private Integer holeNumber;
+  @Column(name = "PAR")
   private Integer par;
+  @Column(name = "SCORE")
   private Integer score;
+  @Column(name = "PUTTS")
   private Integer putts;
 
   @ManyToOne

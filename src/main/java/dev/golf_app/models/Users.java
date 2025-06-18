@@ -11,11 +11,15 @@ import lombok.Setter;
 public class Users {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @Column(name = "ID")
   private Integer id;
 
+  @Column(name = "NAME")
   private String name;
 
+  @Column(name = "EMAIL")
   private String email;
 
+  @Column(name = "PASSWORD")
   private String password;
 }

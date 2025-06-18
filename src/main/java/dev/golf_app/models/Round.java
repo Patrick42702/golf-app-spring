@@ -16,12 +16,16 @@ public class Round {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID")
   private Integer id;
 
   @Temporal(TemporalType.DATE)
+  @Column(name = "DATE")
   private Date date;
 
+  @Column(name = "HOLES")
   private Integer holes; // # of holes played in the round
+  @Column(name = "TOTALPAR")
   private Integer totalPar; // the total par for the round being played
 
   @ManyToOne
@@ -29,6 +33,7 @@ public class Round {
   private GolfCourse golfCourse;
 
   @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @Column(name = "SCORE")
   private List<Score> scores;
 
 }
