@@ -3,10 +3,14 @@ package dev.golf_app.controllers;
 import dev.golf_app.models.GolfCourse;
 import dev.golf_app.repository.GolfCourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/golf-courses")
@@ -16,36 +20,24 @@ public class GolfCourseController {
   private GolfCourseRepository golfCourseRepository;
 
   @GetMapping
-  public Iterable<GolfCourse> getAllCourses() {
-    return golfCourseRepository.findAll();
+  public Page<GolfCourse> getAllCourses(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "20") int size) {
+
+      // Enforce maximum page size
+      size = Math.min(size, 50);
+      return golfCourseRepository.findAll(PageRequest.of(page, size));
+    }
+
+  @GetMapping("/closest-courses")
+  public ArrayList<GolfCourse> getClosestCourses(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "5") int size,
+    @RequestParam() double latitude,
+    @RequestParam() double longitude) {
+
+    size = Math.min(size, 5);
+    return golfCourseRepository.findNearestCourses(latitude, longitude);
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<GolfCourse> getCourse(@PathVariable Integer id) {
-    return golfCourseRepository.findById(id)
-      .map(ResponseEntity::ok)
-      .orElse(ResponseEntity.notFound().build());
-  }
-
-  @PostMapping
-  public GolfCourse createCourse(@RequestBody GolfCourse course) {
-    return golfCourseRepository.save(course);
-  }
-
-  @PutMapping("/{id}")
-  public ResponseEntity<GolfCourse> updateCourse(@PathVariable Integer id, @RequestBody GolfCourse updated) {
-    return golfCourseRepository.findById(id).map(course -> {
-      course.setName(updated.getName());
-      course.setAddress(updated.getAddress());
-      course.setZip(updated.getZip());
-      return ResponseEntity.ok(golfCourseRepository.save(course));
-    }).orElse(ResponseEntity.notFound().build());
-  }
-
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteCourse(@PathVariable Integer id) {
-    if (!golfCourseRepository.existsById(id)) return ResponseEntity.notFound().build();
-    golfCourseRepository.deleteById(id);
-    return ResponseEntity.noContent().build();
-  }
 }
