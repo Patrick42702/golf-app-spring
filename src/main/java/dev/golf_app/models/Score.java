@@ -2,13 +2,14 @@ package dev.golf_app.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Entity
 @Table(name = "scores")
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor
 public class Score {
 
   @Id

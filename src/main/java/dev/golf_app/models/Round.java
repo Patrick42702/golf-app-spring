@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Entity
 @Table(name = "rounds")
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor
 public class Round {
 
   @Id

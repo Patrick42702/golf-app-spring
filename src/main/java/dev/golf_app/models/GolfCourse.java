@@ -3,13 +3,15 @@ package dev.golf_app.models;
 import jakarta.persistence.*;
 
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
 
 @Entity
 @Table(name = "golf_courses")
-@Getter
-@Setter
+@Getter @Setter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class GolfCourse {
 
   @Id
