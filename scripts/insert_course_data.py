@@ -72,9 +72,11 @@ def insert_data(db_url, user, password, table_name, df):
                     state_zip = split_info[3]
                     state, zip = tuple(state_zip.split(' '))
                     phone = split_info[4]
-                    data_to_insert.append(tuple([course_name, address, zip, x[0], x[1], classification, state, city, phone]))
-                except Exception:
-                    print("This golf course is missing information: ", name)
+                    l = [course_name, address.strip(), zip, x[0], x[1], classification, state, city.strip(), phone.strip()]
+                    data_to_insert.append(tuple(l))
+                except Exception as e:
+                    print(e)
+                    # print("This golf course is missing information: ", name)
 
             # Execute the query for each row
             cursor.executemany(insert_query, data_to_insert)
