@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-
 @RestController
 @RequestMapping("/api/golf-courses")
 public class GolfCourseController {
@@ -30,14 +28,23 @@ public class GolfCourseController {
     }
 
   @GetMapping("/closest-courses")
-  public ArrayList<GolfCourse> getClosestCourses(
+  public Page<GolfCourse> getClosestCourses(
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "5") int size,
     @RequestParam() double latitude,
     @RequestParam() double longitude) {
 
     size = Math.min(size, 5);
-    return golfCourseRepository.findNearestCourses(latitude, longitude);
+    return golfCourseRepository.findNearestCourses(latitude, longitude, PageRequest.of(page, size));
+  }
+
+  @GetMapping("/state")
+  public Page<GolfCourse> getStateAbbrCourses(
+    @RequestParam(defaultValue = "NY") String abbr,
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size){
+
+    return golfCourseRepository.findByStateAbbr(abbr, PageRequest.of(page, size));
   }
 
 }
