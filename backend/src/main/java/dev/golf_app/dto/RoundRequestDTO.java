@@ -1,12 +1,11 @@
 package dev.golf_app.dto;
 
 import lombok.Data;
-
-import java.util.Date;
+import java.time.Instant;
 
 @Data
-public class RoundRequest {
-  private Date date;
+public class RoundRequestDTO {
+  private Instant date;
   private Integer holes;
   private Integer totalPar;
   private Integer golfCourseId; // Only the ID, not the full object
