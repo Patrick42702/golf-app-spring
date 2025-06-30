@@ -1,18 +1,17 @@
 package dev.golf_app.models;
 
 import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.Date;
-import java.util.List;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.Instant;
 
 
 @Entity
 @Table(name = "rounds")
 @Getter @Setter
+@Builder(toBuilder = true)
 @NoArgsConstructor
+@AllArgsConstructor
 public class Round {
 
   @Id
@@ -20,9 +19,8 @@ public class Round {
   @Column(name = "ID")
   private Integer id;
 
-  @Temporal(TemporalType.DATE)
   @Column(name = "DATE")
-  private Date date;
+  private Instant date;
 
   @Column(name = "HOLES")
   private Integer holes; // # of holes played in the round
@@ -30,11 +28,11 @@ public class Round {
   private Integer totalPar; // the total par for the round being played
 
   @ManyToOne
-  @JoinColumn(name = "golf_course_id", nullable = false)
+  @JoinColumn(name = "golf_course_id")
   private GolfCourse golfCourse;
 
-  @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-  @Column(name = "SCORE")
-  private List<Score> scores;
+//  @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+//  @Column(name = "SCORE")
+//  private List<Score> scores;
 
 }

@@ -37,8 +37,7 @@ public class GolfCourse {
   @Column(name = "PHONE")
   private String phone;
 
-  @OneToMany(mappedBy = "golfCourse", cascade = CascadeType.ALL)
-  @Column(name = "ROUNDS")
+  @OneToMany(mappedBy = "golfCourse", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Round> rounds;
 
   public String toString(){

@@ -1,6 +1,6 @@
 package dev.golf_app.controllers;
 
-import dev.golf_app.models.GolfCourse;
+import dev.golf_app.dto.GolfCourseDTO;
 import dev.golf_app.repository.GolfCourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,17 +18,17 @@ public class GolfCourseController {
   private GolfCourseRepository golfCourseRepository;
 
   @GetMapping
-  public Page<GolfCourse> getAllCourses(
+  public Page<GolfCourseDTO> getAllCourses(
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "20") int size) {
 
       // Enforce maximum page size
       size = Math.min(size, 50);
-      return golfCourseRepository.findAll(PageRequest.of(page, size));
+      return golfCourseRepository.findAllAsDto(PageRequest.of(page, size));
     }
 
   @GetMapping("/closest-courses")
-  public Page<GolfCourse> getClosestCourses(
+  public Page<GolfCourseDTO> getClosestCourses(
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "5") int size,
     @RequestParam() double latitude,
@@ -39,7 +39,7 @@ public class GolfCourseController {
   }
 
   @GetMapping("/state")
-  public Page<GolfCourse> getStateAbbrCourses(
+  public Page<GolfCourseDTO> getStateAbbrCourses(
     @RequestParam(defaultValue = "NY") String abbr,
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "10") int size){
