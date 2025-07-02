@@ -1,16 +1,13 @@
 package dev.golf_app.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
 @Entity
 @Table(name = "golf_courses")
-@Getter @Setter // @ToString
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class GolfCourse {
 
   @Id
@@ -37,7 +34,7 @@ public class GolfCourse {
   @Column(name = "PHONE")
   private String phone;
 
-  @OneToMany(mappedBy = "golfCourse", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "golfCourse", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Round> rounds;
 
   public String toString(){

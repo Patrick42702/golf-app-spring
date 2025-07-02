@@ -1,11 +1,13 @@
 package dev.golf_app;
 
 import com.querydsl.jpa.impl.JPAQuery;
+import dev.golf_app.dto.GolfCourseDTO;
 import dev.golf_app.models.GolfCourse;
 import dev.golf_app.models.QGolfCourse;
 import dev.golf_app.models.Round;
 import dev.golf_app.models.Users;
 import dev.golf_app.repository.GolfCourseRepository;
+import dev.golf_app.repository.RoundRepository;
 import dev.golf_app.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
@@ -29,6 +31,8 @@ public class GolfAppApplicationTest{
   @Autowired
   private GolfCourseRepository golfCourseRepository;
   @Autowired
+  private RoundRepository roundRepository;
+  @Autowired
   private UserRepository userRepository;
   @Autowired
   private EntityManager entityManager;
@@ -37,45 +41,40 @@ public class GolfAppApplicationTest{
   @Test
   public void testGolfCourseInsertion(){
     List<Round> round = new ArrayList<>();
-    GolfCourse golfCourse = new GolfCourse().toBuilder()
-      .name("Bethpage")
-      .address("09384 gotcha")
-      .zip("12345")
-      .build();
+    GolfCourse golfCourse = new GolfCourse();
+    golfCourse.setName("Bethpage");
+    golfCourse.setAddress("09384 gotcha");
+    golfCourse.setZip("12345");
     golfCourseRepository.save(golfCourse);
     assertEquals(golfCourseRepository.findById(golfCourse.getId()).get().getId(), golfCourse.getId());
   }
 
   @Test
   public void testGoldCourseFindByName(){
-    GolfCourse golfCourse = new GolfCourse().toBuilder()
-      .name("Fishkill")
-      .address("09384 gotcha")
-      .zip("12345")
-      .build();
+    GolfCourse golfCourse = new GolfCourse();
+    golfCourse.setName("Fishkill");
+    golfCourse.setAddress("09384 gotcha");
+    golfCourse.setZip("12345");
 
-    GolfCourse golfCourse2 = new GolfCourse().toBuilder()
-      .name("Beacon")
-      .address("09384 gotcha")
-      .zip("12345")
-      .build();
+    GolfCourse golfCourse2 = new GolfCourse();
+    golfCourse2.setName("Beacon");
+    golfCourse2.setAddress("09384 gotcha");
+    golfCourse2.setZip("12345");
 
-    GolfCourse golfCourse3 = new GolfCourse().toBuilder()
-      .name("Fishkill")
-      .address("09384 gotcha")
-      .zip("00000")
-      .build();
+    GolfCourse golfCourse3 = new GolfCourse();
+    golfCourse.setName("Fishkill");
+    golfCourse.setAddress("09384 gotcha");
+    golfCourse.setZip("00000");
 
     golfCourseRepository.save(golfCourse);
     golfCourseRepository.save(golfCourse2);
     golfCourseRepository.save(golfCourse3);
 
-//    assertEquals(3, Iterables.size(golfCourseRepository.findAllByName("Fishkill")));
   }
 
   @Test
   public void testQueryByZipOrderByName(){
-   Iterable<GolfCourse> golfCourses = golfCourseRepository.findAllByZipOrderByName("12345");
+   Iterable<GolfCourseDTO> golfCourses = golfCourseRepository.findAllByZipOrderByName("12345");
    golfCourses.forEach(golfCourse -> logger.info(golfCourse.getName()));
   }
 
@@ -116,6 +115,23 @@ public class GolfAppApplicationTest{
     query1.from(course).where(course.name.eq("Fishkill").and(course.address.eq("09384 gotcha")));
     List<GolfCourse> resultList = query1.fetch();
     logger.info("Query results:{}", resultList);
+
+  }
+
+  @Test
+  public void testRounds(){
+    Round round = new Round();
+    round.setGolfCourse(golfCourseRepository.findById(1).get());
+    round.setHoles(18);
+    round.setTotalPar(73);
+    roundRepository.save(round);
+    GolfCourse golfCourse = round.getGolfCourse();
+    logger.info("This is the golf course: {}", golfCourse);
+    assertThat(roundRepository.findById(round.getId()).get().getId()).isEqualTo(round.getId());
+  }
+
+  @Test
+  public void testRoundGolfCourseJoin(){
 
   }
 }
