@@ -3,14 +3,13 @@ package dev.golf_app.models;
 import dev.golf_app.validation.Password;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import lombok.*;
+import lombok.Data;
+
+import java.util.List;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "users")
-@Getter @Setter
-@Builder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Users {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,4 +26,7 @@ public class Users {
   @Password
   @Valid
   private String password;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<Round> rounds;
 }

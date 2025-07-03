@@ -2,9 +2,7 @@ package dev.golf_app.dto;
 
 import lombok.*;
 
-@Getter @Setter
-@ToString
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 public class GolfCourseDTO {
   private Integer id;

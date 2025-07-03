@@ -1,53 +1,50 @@
 package dev.golf_app.controllers;
 
 import dev.golf_app.dto.RoundRequestDTO;
-import dev.golf_app.models.GolfCourse;
 import dev.golf_app.models.Round;
-import dev.golf_app.repository.GolfCourseRepository;
-import dev.golf_app.repository.RoundRepository;
+import dev.golf_app.service.RoundService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/round")
 public class RoundController {
-
+  private final Logger logger = LoggerFactory.getLogger(RoundController.class);
   @Autowired
-  private RoundRepository roundRepository;
-  @Autowired
-  private GolfCourseRepository golfCourseRepository;
+  private RoundService roundService;
 
   @GetMapping
-  public Page<Round> getRounds(@RequestParam int page,
+  public ResponseEntity<Page<Round>> getRounds(@RequestParam int page,
                                @RequestParam int size){
-    return roundRepository.findAll(PageRequest.of(page, size));
+    Page<Round> rounds = roundService.getRounds(page, size);
+    return ResponseEntity.ok(rounds);
   }
 
   @PostMapping("/create")
   public ResponseEntity<Round> createRound(@RequestBody RoundRequestDTO roundRequestDTO) {
-    GolfCourse golfCourse = golfCourseRepository.findById(roundRequestDTO.getGolfCourseId()).get();
-
-    Round savedRound = new Round().toBuilder()
-      .holes(roundRequestDTO.getHoles())
-      .totalPar(roundRequestDTO.getTotalPar())
-      .golfCourse(golfCourse)
-      .date(roundRequestDTO.getDate())
-      .build();
-    roundRepository.save(savedRound);
+    Round round = roundService.createRound(roundRequestDTO);
 
     URI location = ServletUriComponentsBuilder
       .fromCurrentRequest()
       .path("/{id}")
-      .buildAndExpand(savedRound.getId())
+      .buildAndExpand(round.getId())
       .toUri();
 
-    return ResponseEntity.created(location).body(savedRound);
+    return ResponseEntity.created(location).body(round);
+  }
+
+  @GetMapping("/user")
+  public ResponseEntity<List<RoundRequestDTO>> getUserRound(@RequestParam int id){
+    List<RoundRequestDTO> round = roundService.getUserRound(id);
+    return ResponseEntity.ok(round);
   }
 
 }

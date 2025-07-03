@@ -1,17 +1,15 @@
 package dev.golf_app.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
 import java.time.Instant;
 
 
 @Entity
 @Table(name = "rounds")
-@Getter @Setter
-@Builder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Round {
 
   @Id
@@ -29,10 +27,11 @@ public class Round {
 
   @ManyToOne
   @JoinColumn(name = "golf_course_id")
+  @JsonIgnore
   private GolfCourse golfCourse;
 
-//  @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-//  @Column(name = "SCORE")
-//  private List<Score> scores;
-
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  @JsonIgnore
+  private Users user;
 }
