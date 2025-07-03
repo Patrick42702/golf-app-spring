@@ -90,19 +90,17 @@ public class GolfAppApplicationTest{
   @Test
   public void testInsertNewUser(){
     assertThrows(ConstraintViolationException.class, () -> {
-      Users user = new Users().toBuilder()
-        .email("Patrick@candy.com")
-        .password("thispasswordshouldthrowanexception")
-        .name("patrick muller")
-        .build();
+      Users user = new Users();
+        user.setEmail("Patrick@candy.com");
+        user.setPassword("thispasswordshouldthrowanexception");
+        user.setName("patrick muller");
       userRepository.save(user);
     });
 
-    Users user = new Users().toBuilder()
-      .email("Patrick@candy.com")
-      .password("This-Passsword-sh0uld!-pass")
-      .name("patrick muller")
-      .build();
+    Users user = new Users();
+    user.setEmail("Patrick@candy.com");
+    user.setPassword("This-Passsword-sh0uld!-pass");
+    user.setName("patrick muller");
     userRepository.save(user);
     assertThat(userRepository.findById(user.getId()).get().getId()).isEqualTo(user.getId());
   }
@@ -133,5 +131,21 @@ public class GolfAppApplicationTest{
   @Test
   public void testRoundGolfCourseJoin(){
 
+  }
+
+  @Test
+  public void testInsertRounds(){
+    Users user = userRepository.findById(1).get();
+    Users user2 = userRepository.findById(2).get();
+    GolfCourse golfCourse = golfCourseRepository.findById(1).get();
+    GolfCourse golfCourse2 = golfCourseRepository.findById(1).get();
+
+    Round round = new Round();
+    round.setUser(user);
+    round.setGolfCourse(golfCourse);
+
+    Round round1 = new Round();
+    round1.setUser(user2);
+    round1.setGolfCourse(golfCourse2);
   }
 }
